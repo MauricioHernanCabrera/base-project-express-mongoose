@@ -31,7 +31,7 @@ router.post('/token', async function(req, res, next) {
           expiresIn: '1d'
         });
 
-        return res.status(200).json({
+        res.status(200).json({
           message: 'User Authenticated',
           data: { access_token }
         });
@@ -42,12 +42,8 @@ router.post('/token', async function(req, res, next) {
   })(req, res, next);
 });
 
-router.get(
-  '/verify',
-  passport.authenticate('jwt', { session: false }),
-  function(req, res, next) {
-    res.json({ message: 'the access token is valid' });
-  }
-);
+router.get('/verify', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+  res.json({ message: 'the access token is valid' });
+});
 
 module.exports = router;

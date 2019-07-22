@@ -4,18 +4,13 @@ const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
 const debug = require('debug')('app:server');
-const mongoose = require('mongoose');
 
-const { config } = require('./config');
+const { initDB } = require('./utils/db');
 const { authRouter } = require('./routes');
 
 const boom = require('@hapi/boom');
 
-const {
-  logErrors,
-  wrapErrors,
-  clientErrorHandler
-} = require('./utils/middlewares/errorsHandlers');
+const { logErrors, wrapErrors, clientErrorHandler } = require('./utils/middlewares/errorsHandlers');
 
 // middleware
 app.use(bodyParser.json());
@@ -24,16 +19,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // cors
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader(
-    'Access-Control-Allow-Methods',
-    'POST, GET, OPTIONS, PUT, DELETE, PATCH'
-  );
+  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE, PATCH');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Max-Age', '86400');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Content-Type, Authorization, X-Requested-With'
-  );
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
   next();
 });
 
@@ -61,17 +50,13 @@ app.use(function(req, res, next) {
 });
 
 (async function() {
+  const { host = 'localhost', port = '8000' } = process.env;
   // database connect
 
-  const MONGO_URI = `mongodb://${config.dbHost}/${config.dbName}`;
-  mongoose.set('useCreateIndex', true);
-  await mongoose.connect(MONGO_URI, {
-    useNewUrlParser: true,
-    useFindAndModify: false
-  });
+  await initDB();
 
   // server
-  const server = app.listen(8000, function() {
-    debug(`Listening http://localhost:${server.address().port}`);
+  const server = app.listen(port, function() {
+    debug(`Listening http://${host}:${server.address().port}`);
   });
 })();

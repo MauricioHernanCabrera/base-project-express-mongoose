@@ -10,7 +10,11 @@ const { authRouter } = require('./routes');
 
 const boom = require('@hapi/boom');
 
-const { logErrors, wrapErrors, clientErrorHandler } = require('./utils/middlewares/errorsHandlers');
+const {
+  logErrors,
+  wrapErrors,
+  clientErrorHandler
+} = require('./utils/middlewares/errorsHandlers');
 
 // middleware
 app.use(bodyParser.json());
@@ -19,10 +23,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // cors
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE, PATCH');
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'POST, GET, OPTIONS, PUT, DELETE, PATCH'
+  );
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Max-Age', '86400');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Content-Type, Authorization, X-Requested-With'
+  );
   next();
 });
 
@@ -41,7 +51,7 @@ app.use(wrapErrors);
 app.use(clientErrorHandler);
 
 // not found
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   const {
     output: { statusCode, payload }
   } = boom.notFound();
@@ -49,7 +59,7 @@ app.use(function(req, res, next) {
   res.status(statusCode).json(payload);
 });
 
-(async function() {
+(async () => {
   const { host = 'localhost', port = '8000' } = process.env;
   // database connect
 

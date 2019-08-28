@@ -1,17 +1,10 @@
 const { UserModel } = require('./../models');
 
-const getOne = filter => {
-  return UserModel.findOne(filter);
-};
+const getOne = filter => UserModel.findOne(filter);
 
-const getAll = () => {
-  return UserModel.find();
-};
+const getAll = () => UserModel.find();
 
-const createOne = ({ data }) => {
-  const user = new UserModel(data);
-  return user.save();
-};
+const createOne = data => UserModel.create(data);
 
 module.exports = {
   getOne,

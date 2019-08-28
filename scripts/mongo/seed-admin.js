@@ -23,9 +23,7 @@ async function hasAdminUser() {
 
 async function createAdminUser() {
   const hashedPassword = await bcrypt.hash(config.authAdminPassword, 10);
-  const user = await UserService.createOne({
-    data: buildAdminUser(hashedPassword)
-  });
+  const user = await UserService.createOne(buildAdminUser(hashedPassword));
   return user._id;
 }
 

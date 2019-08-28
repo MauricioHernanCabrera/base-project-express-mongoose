@@ -14,11 +14,11 @@ router.get(
   // passport.authenticate('jwt', { session: false }),
   async function(req, res, next) {
     try {
-      // const postulants = await postulantService.getAll();
+      const data = await BaseService.getAll();
 
       res.status(200).json({
-        // data: postulants,
-        message: '¡Postulantes recuperados!'
+        data,
+        message: '¡Bases recuperados!'
       });
     } catch (err) {
       next(err);
@@ -28,16 +28,15 @@ router.get(
 
 router.post(
   '/',
-  // validation(createPostulantSchema),
+  // validation(BaseSchema.createOne),
   // passport.authenticate('jwt', { session: false }),
   async function(req, res, next) {
     try {
-      const { body: data } = req;
-      // const postulant = await postulantService.createOne({ data });
+      const data = await BaseService.createOne(req.body);
 
       res.status(201).json({
-        // data: postulant,
-        message: '¡Postulante creado!'
+        data,
+        message: '¡Base creado!'
       });
     } catch (err) {
       next(err);
@@ -51,11 +50,11 @@ router.get(
   async function(req, res, next) {
     try {
       const { _id } = req.params;
-      // const postulant = await postulantService.getOne({ _id });
+      const data = await BaseService.getOne({ _id });
 
       res.status(200).json({
-        // data: postulant,
-        message: '¡Postulante recuperado!'
+        data,
+        message: '¡Base recuperado!'
       });
     } catch (err) {
       next(err);
@@ -66,16 +65,15 @@ router.get(
 router.patch(
   '/:_id/',
   // passport.authenticate('jwt', { session: false }),
-  // validation(updatePostulantFavoriteSchema),
+  // validation(BaseSchema.updateOne),
   async function(req, res, next) {
     try {
       const { _id } = req.params;
-      const { body: data } = req;
-      // const postulant = await postulantService.updateFavorite({ _id, data });
+      const data = await BaseService.updateFavorite({ _id }, req.body);
 
       res.status(200).json({
-        // data: postulant,
-        message: '¡Postulante actualizado!'
+        data,
+        message: '¡Base actualizado!'
       });
     } catch (err) {
       next(err);
@@ -89,11 +87,11 @@ router.delete(
   async function(req, res, next) {
     try {
       const { _id } = req.params;
-      // const postulant = await postulantService.deleteOne({ _id });
+      const data = await BaseService.deleteOne({ _id });
 
       res.status(200).json({
-        // data: postulant,
-        message: '¡Postulante eliminado!'
+        data,
+        message: '¡Base eliminado!'
       });
     } catch (err) {
       next(err);

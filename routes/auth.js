@@ -11,14 +11,14 @@ require('./../utils/auth/strategies/basic');
 // JWT
 require('./../utils/auth/strategies/jwt');
 
-router.post('/token', async function(req, res, next) {
-  passport.authenticate('basic', function(error, user) {
+router.post('/token', async (req, res, next) => {
+  passport.authenticate('basic', (error, user) => {
     try {
       if (error || !user) {
         next(boom.unauthorized());
       }
 
-      req.login(user, { session: false }, async function(error) {
+      req.login(user, { session: false }, async error => {
         if (error) {
           next(error);
         }
@@ -42,8 +42,12 @@ router.post('/token', async function(req, res, next) {
   })(req, res, next);
 });
 
-router.get('/verify', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-  res.json({ message: 'the access token is valid' });
-});
+router.get(
+  '/verify',
+  passport.authenticate('jwt', { session: false }),
+  (req, res, next) => {
+    res.status(200).json({ message: '¡The access token is valid!' });
+  }
+);
 
 module.exports = router;

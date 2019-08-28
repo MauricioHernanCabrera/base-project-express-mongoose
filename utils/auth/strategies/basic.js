@@ -5,13 +5,17 @@ const bcrypt = require('bcrypt');
 const { UserService } = require('./../../../services');
 
 passport.use(
-  new BasicStrategy(async function(username, password, cb) {
+  new BasicStrategy(async (email, password, cb) => {
     try {
-      const filter = {
-        username
-      };
+      const filter = { email };
 
-      const user = await UserService.getOne(filter);
+      console.log(email, password);
+      const user = await UserService.getOne(filter, [
+        'email',
+        'password',
+        '_id',
+        'isAdmin'
+      ]);
 
       if (!user) {
         return cb(boom.unauthorized(), false);

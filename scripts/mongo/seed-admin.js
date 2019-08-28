@@ -17,7 +17,11 @@ async function hasAdminUser() {
     username: config.authAdminUsername
   };
 
-  const adminUser = await UserService.getOne(filter);
+  const adminUser = await UserService.getOne(filter, [
+    'email',
+    'password',
+    '_id'
+  ]);
   return adminUser && adminUser.username;
 }
 

@@ -6,7 +6,7 @@ const path = require('path');
 const debug = require('debug')('app:server');
 
 const { initDB } = require('./utils/db');
-const { authRouter } = require('./routes');
+const { AuthRouter, UserRouter } = require('./routes');
 
 const boom = require('@hapi/boom');
 
@@ -43,7 +43,8 @@ app.use((req, res, next) => {
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // routes
-app.use('/api/auth', authRouter);
+app.use('/auth', AuthRouter);
+app.use('/users', UserRouter);
 
 // error handlers
 app.use(logErrors);

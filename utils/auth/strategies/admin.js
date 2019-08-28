@@ -12,7 +12,6 @@ passport.use(
     },
     async (tokenPayload, cb) => {
       try {
-        console.log(tokenPayload);
         const filter = { email: tokenPayload.email };
 
         const user = await UserService.getOne(filter, [
@@ -21,8 +20,16 @@ passport.use(
           '_id',
           'isAdmin'
         ]);
+
         if (!user) {
           return cb(boom.unauthorized(), false);
+        }
+
+        if (user.isAdmin) {
+          return cb(
+            boom.unauthorized('Necesitas ser admin para realizar esta accion'),
+            false
+          );
         }
 
         return cb(null, user);
